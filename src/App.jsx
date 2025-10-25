@@ -1,19 +1,43 @@
-import React from 'react'
-import { Routes , Route } from 'react-router-dom'
+import React, { useEffect } from 'react'
+import { Routes, Route } from 'react-router-dom'
 import Home from './pages/Home'
 import Profile from './pages/Profile'
 import SigninCard from './pages/SigninCard'
 import OtpVerification from './pages/OtpVerification'
 import SignUp from './pages/Register'
+import Add from './pages/Add'
+import { useUser } from './context/UserContext'
+import axios from 'axios'
+import { useAuth } from './context/AuthContext'
+const baseUrl = import.meta.env.VITE_API_URL
+// import { authDataPorvider } from './context/AuthContext.jsx'
 // import Verify from './pages'
 const App = () => {
+
+  const { user, setUser } = useUser()
+  useEffect(() => {
+    if (!user) {
+      axios.get(`${baseUrl}/auth/me`, { withCredentials: true })
+        .then((res) => {
+          // console.log("");
+          setUser(res.data.user)
+        })
+        .catch((error) => { console.log(error) })
+    }
+  }, [])
+  // const func = async () => {
+
+  // }
   return (
     <Routes>
-      <Route path='/' element={<Home/>} />
-      <Route path='/profile' element={ <Profile/> } />
-      <Route path='/register' element={<SignUp/>} />
-      <Route path='/login' element={<SigninCard/>} />
-      <Route path='/register/verify' element={<OtpVerification/>}  />
+      <Route path='/' element={<Home />} />
+      <Route path='/profile' element={<Profile />} />
+      {/* <authDataPorvider> */}
+      <Route path='/register' element={<SignUp />} />
+      <Route path='/register/verify' element={<OtpVerification />} />
+      <Route path='/register/done' element={<Add />} />
+      {/* </authDataPorvider> */}
+      <Route path='/login' element={<SigninCard />} />
 
     </Routes>
   )

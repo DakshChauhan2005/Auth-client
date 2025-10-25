@@ -1,7 +1,31 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import profilePic from "../assets/signin.jpeg"; // place your image in src/assets/
+import { useUser } from '../context/UserContext';
+import { useNavigate } from "react-router-dom";
+import { toast } from 'react-toastify';
+import axios from 'axios';
+const baseUrl = import.meta.env.VITE_API_URL
 
 const Profile = () => {
+  const navigate = useNavigate();
+  const {user} = useUser()
+  // checking if user is login or not to open this page`
+  useEffect(() => {
+    console.log(user);
+    if (!user) {
+      toast.error("Login needed");
+      navigate('/login');
+    }
+  }, [])
+  const handleLogout =async () =>{
+    try {
+      // console.log();
+      let res = await axios.get(`${baseUrl}/auth/logout`, { withCredentials: true })
+      toast(res.data.message);
+    } catch (error) {
+      console.error(error)
+    }
+  }
   return (
 
     <div className="min-h-screen bg-gray-100 flex justify-center items-center p-6">
@@ -28,11 +52,11 @@ const Profile = () => {
           <div className="space-y-3 text-sm text-gray-700">
             <div className="flex items-center justify-between border-b border-gray-200 pb-2">
               <span className="font-medium">Email:</span>
-              <span className="text-gray-600">daksh@example.com</span>
+              <span className="text-gray-600">{user?.email}</span>
             </div>
             <div className="flex items-center justify-between border-b border-gray-200 pb-2">
               <span className="font-medium">Phone:</span>
-              <span className="text-gray-600">+91 98765 43210</span>
+              <span className="text-gray-600">{user?.mobile}</span>
             </div>
             <div className="flex items-center justify-between border-b border-gray-200 pb-2">
               <span className="font-medium">Location:</span>
@@ -45,7 +69,7 @@ const Profile = () => {
             <button className="bg-blue-400 hover:bg-blue-500 text-white px-6 py-2 rounded-full text-sm font-medium transition">
               Edit Profile
             </button>
-            <button className="border border-blue-400 text-blue-500 px-6 py-2 rounded-full text-sm font-medium hover:bg-blue-50 transition">
+            <button onClick={handleLogout} className="border border-blue-400 text-blue-500 px-6 py-2 rounded-full text-sm font-medium hover:bg-blue-50 transition">
               Logout
             </button>
           </div>
