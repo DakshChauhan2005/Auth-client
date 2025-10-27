@@ -8,22 +8,24 @@ const baseUrl = import.meta.env.VITE_API_URL
 
 const Profile = () => {
   const navigate = useNavigate();
-  const {user} = useUser()
+  const { user, setUser, loading } = useUser()
   // checking if user is login or not to open this page`
   useEffect(() => {
-    console.log(user);
-    if (!user) {
+    if (!loading && !user) {
       toast.error("Login needed");
-      navigate('/login');
+      navigate("/login");
     }
-  }, [])
-  const handleLogout =async () =>{
+  }, [user, loading, navigate]);
+  const handleLogout = async () => {
     try {
       // console.log();
       let res = await axios.get(`${baseUrl}/auth/logout`, { withCredentials: true })
-      toast(res.data.message);
+      setUser(null)
+      navigate('/');
+      toast.success('Logged out');
     } catch (error) {
       console.error(error)
+      toast.error('Logout failed');
     }
   }
   return (

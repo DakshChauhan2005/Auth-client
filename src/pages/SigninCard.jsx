@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import signinIllustration from "../assets/signin.jpeg"; // update path if needed
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -9,16 +9,18 @@ import { useAuth } from "../context/AuthContext";
 
 export default function SigninCard() {
   const navigate = useNavigate();
-  const {user , setUser } = useUser()
-  if(user){
-    navigate('/profile')
-  }
-  const {formData, setFormData} = useAuth()
+  const { user, loading, setUser } = useUser()
+
+  useEffect(() => {
+    if (!loading && user) navigate("/profile");
+  }, [user, loading, navigate]);
+
+  const { formData, setFormData } = useAuth()
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("Submit")
     try {
-      const res = await axios.post(`${baseUrl}/auth/login`, formData,{ withCredentials: true });
+      const res = await axios.post(`${baseUrl}/auth/login`, formData, { withCredentials: true });
       toast(res.data.message);
       console.log(res);
       setUser(res.data.user)

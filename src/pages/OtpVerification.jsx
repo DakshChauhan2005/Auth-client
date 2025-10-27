@@ -141,7 +141,6 @@ export default function OtpVerification() {
                             console.log("Register response", resp);
                             toast(resp.data.message || "OTP is verified")
                             clearFormData();
-                            // console.log("data is cleared", formData)
                             navigate("/profile")
                         }).catch((error) => {
                             console.log("Registration error", error);

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import deskIllustration from "../assets/signup-image.jpg";
 import { Link, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -12,10 +12,9 @@ const baseUrl = import.meta.env.VITE_API_URL
 const SignUp = () => {
   const navigate = useNavigate();
   const { user } = useUser()
-  if (user) {
-    // toast("already Logedin")
-    navigate('/profile')
-  }
+  useEffect(()=>{
+    if (user) navigate('/profile')
+  },[user, navigate])
   const { formData, setFormData } = useAuth();
   const [term, setTerm] = useState(false);
   const [loading, setLoading] = useState(false);

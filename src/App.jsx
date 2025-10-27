@@ -8,7 +8,8 @@ import SignUp from './pages/Register'
 import Add from './pages/Add'
 import { useUser } from './context/UserContext'
 import axios from 'axios'
-import { useAuth } from './context/AuthContext'
+// import { useAuth } from './context/AuthContext'
+import PrivateRoute from './pages/PrivateRoute'
 const baseUrl = import.meta.env.VITE_API_URL
 // import { authDataPorvider } from './context/AuthContext.jsx'
 // import Verify from './pages'
@@ -31,7 +32,7 @@ const App = () => {
   return (
     <Routes>
       <Route path='/' element={<Home />} />
-      <Route path='/profile' element={<Profile />} />
+      <Route path='/profile' element={<PrivateRoute><Profile/></PrivateRoute>} />
       {/* <authDataPorvider> */}
       <Route path='/register' element={<SignUp />} />
       <Route path='/register/verify' element={<OtpVerification />} />
